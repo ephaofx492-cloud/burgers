@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ONE BURGER | Complete System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+     
+    
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">THE ONE <span style="color:var(--gold)">BURGER</span></div>
+            <div class="nav-actions">
+                <div style="position:relative; cursor:pointer; margin-right:20px; display:flex; align-items:center; gap:5px;" onclick="app.switchTab('orders')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73Z"/><path d="M3.29 7 12 12l8.71-5"/><path d="M12 22V12"/></svg>
+                    <span style="font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">Orders</span>
+                    <div id="header-order-badge" style="display:none; position:absolute; top:-2px; left:-2px; width:8px; height:8px; background:#ff2e2e; border-radius:50%;"></div>
+                </div>
+                <button class="btn btn-primary" onclick="app.scrollTo('menu')">Order Now</button>
+                <div style="cursor:pointer; font-weight:700; margin-left:20px;" onclick="app.toggleCart()">CART (<span id="cart-count">0</span>)</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>THE ONE BURGER</h1>
+        <p style="color:var(--text-muted); letter-spacing: 2px; margin-bottom: 30px;">THE CROWN JEWEL OF FAST FOOD</p>
+        <button class="btn btn-primary" onclick="app.scrollTo('menu')">VIEW MENU</button>
+    </section>
+
+    <!-- MENU SECTION -->
+    <section id="menu" style="padding: 60px 0;">
+        <div class="section-title">Royal Selection</div>
+        <div class="menu-grid" id="menu-grid">
+            <!-- Items Injected via JS -->
+        </div>
+    </section>
+
+    <!-- ORDER HISTORY SECTION -->
+    <section id="orders" style="padding: 60px 0; display: none;">
+        <div class="section-title">My Orders</div>
+        <div class="order-history-container" id="order-history-list">
+            <!-- Orders Injected via JS -->
+        </div>
+    </section>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <div class="bottom-nav">
+        <div class="b-nav-item active" onclick="app.switchTab('home')">Home</div>
+        <div class="b-nav-item" onclick="app.switchTab('menu')">Menu</div>
+        <div class="b-nav-item" onclick="app.toggleCart()">Cart</div>
+        <div class="b-nav-item" onclick="app.switchTab('orders')" style="position:relative;">
+            <div id="order-badge" style="display:none; position:absolute; top:-5px; right:5px; width:10px; height:10px; background:#ff2e2e; border-radius:50%; border:2px solid #111;"></div>
+            Orders
+        </div>
+    </div>
+
+    <!-- STICKY CHECKOUT BAR (New Feature) -->
+    <div class="sticky-checkout" id="stickyCheckout">
+        <div class="sc-details">
+            <h4>Cart Total</h4>
+            <div class="total" id="scTotal">0 ETB</div>
+        </div>
+        <button class="sc-btn" onclick="app.toggleCart(true)">Proceed to Checkout</button>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div class="modal-overlay" id="cartOverlay" onclick="if(event.target === this) app.toggleCart()"></div>
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h3 style="color:white; font-size:18px;">CHECKOUT</h3>
+            <span onclick="app.toggleCart()" style="font-size:24px; cursor:pointer; color:#777;">&times;</span>
+        </div>
+        
+        <div class="cart-body">
+            <div id="cartItems"></div>
+            
+            <!-- Checkout Form now inside scrollable area -->
+            <div id="checkoutForm" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #333;">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="orderName" class="form-input" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" id="orderPhone" class="form-input" placeholder="0911...">
+                </div>
+
+                <label class="form-label">Select Payment Method</label>
+                
+                <div class="pay-option" onclick="app.selectPayment('telebirr', this)">
+                    <input type="radio" name="pay" value="telebirr">
+                    <div style="margin-left:10px;">
+                        <div style="color:white; font-size:14px; font-weight:700;">Telebirr</div>
+                        <div style="font-size:11px; color:#777;">Pay with Telebirr App</div>
+                    </div>
+                </div>
+
+                <div class="pay-option" onclick="app.selectPayment('cbe', this)">
+                    <input type="radio" name="pay" value="cbe">
+                    <div style="margin-left:10px;">
+                        <div style="color:white; font-size:14px; font-weight:700;">CBE Birr</div>
+                        <div style="font-size:11px; color:#777;">Pay with CBE Birr App</div>
+                    </div>
+                </div>
+
+                <div class="pay-option" onclick="app.selectPayment('cod', this)">
+                    <input type="radio" name="pay" value="cod">
+                    <div style="margin-left:10px;">
+                        <div style="color:white; font-size:14px; font-weight:700;">Cash on Delivery</div>
+                        <div style="font-size:11px; color:#777;">Pay when rider arrives</div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="transGroup" style="margin-top:15px; display:none;">
+                    <label class="form-label">Transaction ID</label>
+                    <input type="text" id="transId" class="form-input" placeholder="Paste Reference Number here">
+                </div>
+            </div>
+        </div>
+
+        <!-- --- REPLACE THIS SECTION IN YOUR HTML --- -->
+<div class="cart-footer">
+    <!-- Totals and Action Button -->
+    <div style="margin-top:0px;">
+        <div class="summary-row"><span>Subtotal</span><span id="summarySubtotal">0 ETB</span></div>
+        <div class="summary-row"><span>Delivery Fee 🚚</span><span>30 ETB</span></div>
+        <div class="summary-row"><span>Service Fee</span><span>10 ETB</span></div>
+        <div class="summary-row total"><span>TOTAL PRICE</span><span id="summaryTotal" style="color:var(--gold);">0 ETB</span></div>
+    </div>
+
+    <button class="btn btn-primary" id="payBtn" style="width:100%; margin-top:20px; padding:16px; border-radius:8px;" onclick="app.processOrder()">PAY NOW</button>
+</div>
+<!-- --- END REPLACE --- -->
+    </div>
+
+    <!-- PROCESSING MODAL -->
+    <div class="modal-overlay" id="processingModal">
+        <div style="text-align:center; color:white;">
+            <div style="width:50px; height:50px; border:4px solid rgba(255,255,255,0.1); border-top:4px solid var(--gold); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 20px;"></div>
+            <h3>Processing Payment</h3>
+            <p style="color:#888; font-size:14px; margin-top:10px;">Verifying transaction...</p>
+        </div>
+    </div>
+
+    <!-- SUCCESS RECEIPT MODAL (Order Confirmation) -->
+    <div class="modal-overlay" id="successModal">
+        <div style="text-align:center;">
+            <div class="receipt" id="receiptContent" style="padding: 30px; background: white; border-radius: 12px; width: 320px; margin: 0 auto; color: #333;">
+                <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+                <h3 style="margin: 0 0 20px 0; color: #333;">Your order is ready! 🍔</h3>
+                <div id="receiptItems" style="text-align: left; border-top: 1px dashed #eee; border-bottom: 1px dashed #eee; padding: 15px 0; margin-bottom: 15px;">
+                    <!-- Details Injected via JS -->
+                </div>
+                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px;">
+                    <span>Total</span>
+                    <span id="receiptGrandTotal">0 ETB</span>
+                </div>
+                <div style="margin-top: 20px; font-size: 11px; color: #999;">THANK YOU FOR DINING WITH ROYALTY</div>
+            </div>
+            <button class="btn btn-primary" id="confirmActionBtn" style="margin-top: 30px; width: 200px; border-radius: 30px;" onclick="app.redirectToPayment()">PROCEED TO PAY</button>
+            <br>
+            <button class="btn" style="margin-top: 15px; color: white; background: rgba(255,255,255,0.1); border-radius: 30px; width: 200px;" onclick="app.closeSuccess()">View My Orders</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
